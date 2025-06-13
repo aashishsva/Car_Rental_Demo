@@ -1,0 +1,42 @@
+.sidebar {
+  position: fixed; /* ensure it doesn't shrink with content */
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh; /* full screen height */
+  background-color: #1f2937;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 50px;
+}
+
+
+.heading {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+}
+
+.navList li {
+  margin-bottom: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.navList li:hover {
+  background-color: #374151;
+}
+
+.logout {
+  color: #f87171;
+}

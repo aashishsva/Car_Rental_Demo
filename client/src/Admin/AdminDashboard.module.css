@@ -1,0 +1,18 @@
+.dashboardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.dashboardContent {
+  margin-left: 220px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+}
+
+
+.sidebar.collapsed + .dashboardContent {
+  margin-left: 60px;
+}
