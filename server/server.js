@@ -15,6 +15,7 @@ const loginController = require('./controller/adminloginController');
 const registrationController = require('./controller/adminregistrationController');
 const userRegistrationController = require('./controller/userregistrationController')
 const userLoginController = require('./controller/userloginController')
+const userAuth = require('./middleware/userAuth')
 
 const upload = require('./middleware/upload'); // multer middleware
 
@@ -25,7 +26,9 @@ app.use(cors());
 app.use(express.json());
 
 // Static folder for uploaded images
-app.use('/uploads', express.static(path.join(__dirname, 'upload')));
+app.use('/upload', express.static(path.join(__dirname, 'upload')));
+
+
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected'))
@@ -49,6 +52,12 @@ app.post('/vehicalOwner', vehicalOwnerController.createvehicleOwner);
 app.put('/vehicalOwner/:id', vehicalOwnerController.updatevehicleOwner);
 app.delete('/vehicalOwner/:id', vehicalOwnerController.deletevehicleOwner);
 
+
+// 👇 Vehicle Owner Profile routes
+app.get('/vehicalOwner/profile',userAuth ,vehicalOwnerController.getProfile);
+app.put('/vehicalOwner/profile', userAuth, vehicalOwnerController.updateProfile);
+
+
 // Passenger routes
 app.get('/passenger', passengerController.getAllpassengers);
 app.post('/passenger', passengerController.createpassenger);
@@ -63,6 +72,7 @@ app.post(
   upload.fields([
     { name: 'carimage1', maxCount: 1 },
     { name: 'carimage2', maxCount: 1 },
+    { name: 'rcimage', maxCount: 1 }    
   ]),
   postCarController.createpostCar
 );
@@ -102,6 +112,7 @@ app.post('/adminlogin', loginController);
 
 //User Registration routes
 app.get('/userregister', userRegistrationController.getAllUsers);
+app.get('/userregister/:id', userRegistrationController.getUserById);
 app.post('/userregister', userRegistrationController.registerUser);
 app.put('/userregister/:id', userRegistrationController.updateUser);
 app.delete('/userregister/:id', userRegistrationController.deleteUser);

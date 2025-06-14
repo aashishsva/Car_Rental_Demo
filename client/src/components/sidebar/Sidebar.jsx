@@ -22,36 +22,48 @@ const Sidebar = () => {
       {!isCollapsed && <h2 className={styles.sidebarTitle}>Admin Panel</h2>}
 
       <ul className={styles.sidebarList}>
+
+        {/* Admin Dashboard Home */}
         <li>
-          <Link to="/admindashboard/postcar" className={styles.sidebarLink}>
-            <span className={styles.icon}>🚗</span>
-            {!isCollapsed && <span className={styles.label}>Post Car</span>}
+          <Link to="/admindashboard" className={styles.sidebarLink}>
+            <span className={styles.icon}>🏠</span>
+            {!isCollapsed && <span className={styles.label}>Dashboard</span>}
           </Link>
         </li>
-        <li>
-          <Link to="/admindashboard/ordercar" className={styles.sidebarLink}>
-            <span className={styles.icon}>📦</span>
-            {!isCollapsed && <span className={styles.label}>Order Car</span>}
-          </Link>
-        </li>
-        <li>
-          <Link to="/admindashboard/locationmaster" className={styles.sidebarLink}>
-            <span className={styles.icon}>📍</span>
-            {!isCollapsed && <span className={styles.label}>Location Master</span>}
-          </Link>
-        </li>
+
+        {/* Category Master */}
         <li>
           <Link to="/admindashboard/categorymaster" className={styles.sidebarLink}>
             <span className={styles.icon}>🗂️</span>
             {!isCollapsed && <span className={styles.label}>Category Master</span>}
           </Link>
         </li>
+
+        {/* Location Master */}
+        <li>
+          <Link to="/admindashboard/locationmaster" className={styles.sidebarLink}>
+            <span className={styles.icon}>📍</span>
+            {!isCollapsed && <span className={styles.label}>Location Master</span>}
+          </Link>
+        </li>
+
+        {/* Vehicle Owner */}
         <li>
           <Link to="/admindashboard/vehicleowner" className={styles.sidebarLink}>
             <span className={styles.icon}>👤</span>
             {!isCollapsed && <span className={styles.label}>Vehicle Owner</span>}
           </Link>
         </li>
+
+        {/* Order Car */}
+        <li>
+          <Link to="/admindashboard/ordercar" className={styles.sidebarLink}>
+            <span className={styles.icon}>📦</span>
+            {!isCollapsed && <span className={styles.label}>Order Car</span>}
+          </Link>
+        </li>
+
+        {/* Logout */}
         <li>
           <button onClick={handleLogout} className={styles.logoutBtn}>
             <span className={styles.icon}>🔓</span>

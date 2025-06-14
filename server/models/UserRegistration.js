@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
   locationid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'LocationMaster',
+  },
+  role: {
+    type: String,
+    enum: ['passenger', 'vehicleowner'],
+    default: 'passenger', // optional: default role
+    required: true
   }
 });
 

@@ -1,54 +1,54 @@
-/* Reset & Base */
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+
 body {
-  display: initial;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Navbar styles */
+/* Full-width Navbar */
 .navbar {
+  width: 99vw;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #004aad;
-  padding: 12px 24px;
-  color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 16px 32px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 }
+
 
 /* Logo */
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
-  cursor: pointer;
+  color: #222;
+  text-decoration: none;
 }
 
 /* Navigation links */
 .navLinks {
   list-style: none;
   display: flex;
-  gap: 14px;
-  margin: 0;
-  padding: 0;
+  gap: 20px;
 }
 
-/* Buttons */
+/* Button Style */
 .btn {
-  background-color: transparent;
-  border: 2px solid white;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 5px;
+  text-decoration: none;
+  color: #222;
   font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .btn:hover {
-  background-color: white;
-  color: #004aad;
+  background-color: #f0f0f0;
+  color: #000;
 }

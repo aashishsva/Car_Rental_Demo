@@ -1,25 +1,32 @@
 const postCar = require('../models/PostCar');
+const vehicleOwner = require('../models/VehicleOwner');
 
-// Get all postCars with populated catname and owner fullname
+// Get all postCars of logged-in vehicle owner
 exports.getAllpostCars = async (req, res) => {
   try {
-    const postCars = await postCar.find()
+    const { vehicleownerid } = req.query;
+
+    // If no vehicleownerid is provided, return error
+    if (!vehicleownerid) {
+      return res.status(400).json({ message: 'vehicleownerid is required' });
+    }
+
+    const postCars = await postCar.find({ vehicleownerid })  // <-- ✅ Filter here
       .populate("catid", "catname")
       .populate("vehicleownerid", "fullname");
+
     res.status(200).json(postCars);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching postCars', error });
   }
 };
 
-// Create new postCar with image filenames from multer (req.files)
-exports.createpostCar = async (req, res) => {
-  try {
-    console.log('Body:', req.body);
-    console.log('Files:', req.files);
-    const carimage1 = req.files?.carimage1 ? req.files.carimage1[0].filename : null;
-    const carimage2 = req.files?.carimage2 ? req.files.carimage2[0].filename : null;
 
+
+exports.createpostCar = async (req, res) => {
+  console.log("REQ BODY:", req.body);
+  console.log("Vehicle Owner ID:", req.body.vehicleownerid);
+  try {
     const {
       catid,
       vehicleownerid,
@@ -30,58 +37,50 @@ exports.createpostCar = async (req, res) => {
       variant,
       driverstatus,
       registrationyear,
-      carvehicleno
+      carvehicleno,
+      rcnumber
     } = req.body;
+
+    const carimage1 = req.files?.carimage1?.[0]?.filename || null;
+    const carimage2 = req.files?.carimage2?.[0]?.filename || null;
+    const rcimage = req.files?.rcimage?.[0]?.filename || null;
 
     const newpostCar = new postCar({
       catid,
       vehicleownerid,
       cartitle,
       shortdescription,
-      carimage1,
-      carimage2,
       postdate,
       price,
       variant,
       driverstatus,
       registrationyear,
-      carvehicleno
+      carvehicleno,
+      rcnumber,
+      carimage1,
+      carimage2,
+      rcimage
     });
 
     await newpostCar.save();
-    res.status(201).json(newpostCar);
 
+    await vehicleOwner.findByIdAndUpdate(
+      vehicleownerid,
+      { $push: { postcars: newpostCar._id } },
+      { new: true }
+    );
+
+    res.status(201).json(newpostCar);
   } catch (error) {
+    console.log("Error in createpostCar:", error);
     res.status(500).json({ message: 'Error creating postCar', error });
   }
 };
 
-// Delete postCar by ID
-exports.deletepostCar = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const deletedpostCar = await postCar.findByIdAndDelete(id);
-
-    if (!deletedpostCar) {
-      return res.status(404).json({ message: 'postCar not found' });
-    }
-
-    res.status(200).json({ message: 'postCar deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting postCar', error });
-  }
-};
-
-// Update postCar by ID with optional image update from multer
+// Update postCar by ID with optional new images
 exports.updatepostCar = async (req, res) => {
   const { id } = req.params;
   try {
-    // Check if new images uploaded
-    const carimage1 = req.files?.carimage1 ? req.files.carimage1[0].filename : undefined;
-    const carimage2 = req.files?.carimage2 ? req.files.carimage2[0].filename : undefined;
-
-    // Destructure body
     const {
       catid,
       vehicleownerid,
@@ -92,25 +91,27 @@ exports.updatepostCar = async (req, res) => {
       variant,
       driverstatus,
       registrationyear,
-      carvehicleno
+      carvehicleno,
+      rcnumber
     } = req.body;
 
-    // Build update object - only add keys that have value (not undefined or null)
-    const updateFields = {};
-    if (catid !== undefined) updateFields.catid = catid;
-    if (vehicleownerid !== undefined) updateFields.vehicleownerid = vehicleownerid;
-    if (cartitle !== undefined) updateFields.cartitle = cartitle;
-    if (shortdescription !== undefined) updateFields.shortdescription = shortdescription;
-    if (postdate !== undefined) updateFields.postdate = postdate;
-    if (price !== undefined) updateFields.price = price;
-    if (variant !== undefined) updateFields.variant = variant;
-    if (driverstatus !== undefined) updateFields.driverstatus = driverstatus;
-    if (registrationyear !== undefined) updateFields.registrationyear = registrationyear;
-    if (carvehicleno !== undefined) updateFields.carvehicleno = carvehicleno;
+    const updateFields = {
+      ...(catid && { catid }),
+      ...(vehicleownerid && { vehicleownerid }),
+      ...(cartitle && { cartitle }),
+      ...(shortdescription && { shortdescription }),
+      ...(postdate && { postdate }),
+      ...(price && { price }),
+      ...(variant && { variant }),
+      ...(driverstatus && { driverstatus }),
+      ...(registrationyear && { registrationyear }),
+      ...(carvehicleno && { carvehicleno }),
+      ...(rcnumber && { rcnumber })
+    };
 
-    // Only overwrite images if new ones are uploaded
-    if (carimage1 !== undefined) updateFields.carimage1 = carimage1;
-    if (carimage2 !== undefined) updateFields.carimage2 = carimage2;
+    if (req.files?.carimage1?.[0]) updateFields.carimage1 = req.files.carimage1[0].filename;
+    if (req.files?.carimage2?.[0]) updateFields.carimage2 = req.files.carimage2[0].filename;
+    if (req.files?.rcimage?.[0]) updateFields.rcimage = req.files.rcimage[0].filename;
 
     const updatedpostCar = await postCar.findByIdAndUpdate(
       id,
@@ -119,12 +120,33 @@ exports.updatepostCar = async (req, res) => {
     );
 
     if (!updatedpostCar) {
-      return res.status(404).json({ message: 'postCar not found' });
+      return res.status(404).json({ message: 'PostCar not found' });
     }
 
     res.status(200).json(updatedpostCar);
-
   } catch (error) {
     res.status(500).json({ message: 'Error updating postCar', error });
+  }
+};
+
+// Delete postCar by ID and remove from owner's postcars[]
+exports.deletepostCar = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedpostCar = await postCar.findByIdAndDelete(id);
+
+    if (!deletedpostCar) {
+      return res.status(404).json({ message: 'PostCar not found' });
+    }
+
+    await vehicleOwner.findByIdAndUpdate(
+      deletedpostCar.vehicleownerid,
+      { $pull: { postcars: deletedpostCar._id } }
+    );
+
+    res.status(200).json({ message: 'PostCar deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting postCar', error });
   }
 };

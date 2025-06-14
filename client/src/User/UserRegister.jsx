@@ -13,6 +13,7 @@ const UserRegister = () => {
     dateofbirth: "",
     address: "",
     locationid: "",
+    role: ""  // 👈 Added role here
   });
 
   const [message, setMessage] = useState("");
@@ -47,6 +48,7 @@ const UserRegister = () => {
         dateofbirth: "",
         address: "",
         locationid: "",
+        role: ""
       });
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
@@ -58,6 +60,7 @@ const UserRegister = () => {
       <h2 className={styles.title}>User Registration</h2>
       <form onSubmit={handleSubmit}>
 
+        {/* Full Name */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Full Name</label>
           <input
@@ -70,6 +73,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Email */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Email</label>
           <input
@@ -82,6 +86,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Mobile Number */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Mobile No</label>
           <input
@@ -96,6 +101,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Password */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Password</label>
           <input
@@ -109,6 +115,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Date of Birth */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Date of Birth</label>
           <input
@@ -120,6 +127,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Address */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Address</label>
           <textarea
@@ -131,6 +139,7 @@ const UserRegister = () => {
           />
         </div>
 
+        {/* Location */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Location</label>
           <select
@@ -144,6 +153,22 @@ const UserRegister = () => {
             {locations.map(loc => (
               <option key={loc._id} value={loc._id}>{loc.locationname}</option>
             ))}
+          </select>
+        </div>
+
+        {/* Role */}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Role</label>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            required
+            className={styles.select}
+          >
+            <option value="">Select Role</option>
+            <option value="passenger">Passenger</option>
+            <option value="vehicleowner">Vehicle Owner</option>
           </select>
         </div>
 
