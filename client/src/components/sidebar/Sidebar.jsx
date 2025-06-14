@@ -23,39 +23,35 @@ const Sidebar = () => {
 
       <ul className={styles.sidebarList}>
         <li>
-
-          {/* CategoryMaster */}
-          <Link to="/admindashboard/categorymaster" className={styles.sidebarLink}>
-            <span className={styles.icon}>🗂️</span>
-            {!isCollapsed && <span className={styles.label}>Category Master</span>}
+          <Link to="/admindashboard/postcar" className={styles.sidebarLink}>
+            <span className={styles.icon}>🚗</span>
+            {!isCollapsed && <span className={styles.label}>Post Car</span>}
           </Link>
         </li>
-
-         {/* Location Master */}
-         <li>
-          <Link to="/admindashboard/locationmaster" className={styles.sidebarLink}>
-            <span className={styles.icon}>📍</span>
-            {!isCollapsed && <span className={styles.label}>Location Master</span>}
-          </Link>
-        </li>
-
-        {/* VehicleOwner */}
-        <li>
-          <Link to="/admindashboard/vehicleowner" className={styles.sidebarLink}>
-            <span className={styles.icon}>👤</span>
-            {!isCollapsed && <span className={styles.label}>Vehicle Owner</span>}
-          </Link>
-        </li>
-        
         <li>
           <Link to="/admindashboard/ordercar" className={styles.sidebarLink}>
             <span className={styles.icon}>📦</span>
             {!isCollapsed && <span className={styles.label}>Order Car</span>}
           </Link>
         </li>
-       
-        
-        
+        <li>
+          <Link to="/admindashboard/locationmaster" className={styles.sidebarLink}>
+            <span className={styles.icon}>📍</span>
+            {!isCollapsed && <span className={styles.label}>Location Master</span>}
+          </Link>
+        </li>
+        <li>
+          <Link to="/admindashboard/categorymaster" className={styles.sidebarLink}>
+            <span className={styles.icon}>🗂️</span>
+            {!isCollapsed && <span className={styles.label}>Category Master</span>}
+          </Link>
+        </li>
+        <li>
+          <Link to="/admindashboard/vehicleowner" className={styles.sidebarLink}>
+            <span className={styles.icon}>👤</span>
+            {!isCollapsed && <span className={styles.label}>Vehicle Owner</span>}
+          </Link>
+        </li>
         <li>
           <button onClick={handleLogout} className={styles.logoutBtn}>
             <span className={styles.icon}>🔓</span>

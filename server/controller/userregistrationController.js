@@ -14,16 +14,7 @@ const getAllUsers = async (req, res) => {
 // 🔹 Register a new user
 const registerUser = async (req, res) => {
   try {
-    const {
-      fullname,
-      emailid,
-      mobileno,
-      password,
-      dateofbirth,
-      address,
-      locationid,
-      role // New field
-    } = req.body;
+    const { fullname, emailid, mobileno, password, dateofbirth, address, locationid } = req.body;
 
     const existingUser = await User.findOne({ emailid });
     if (existingUser) {
@@ -40,7 +31,6 @@ const registerUser = async (req, res) => {
       dateofbirth,
       address,
       locationid,
-      role // Add role here
     });
 
     await newUser.save();
@@ -53,17 +43,7 @@ const registerUser = async (req, res) => {
 // 🔹 Update user by ID
 const updateUser = async (req, res) => {
   try {
-    const {
-      fullname,
-      emailid,
-      mobileno,
-      password,
-      dateofbirth,
-      address,
-      locationid,
-      role // New field
-    } = req.body;
-
+    const { fullname, emailid, mobileno, password, dateofbirth, address, locationid } = req.body;
     const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
     const updateData = {
@@ -73,7 +53,6 @@ const updateUser = async (req, res) => {
       dateofbirth,
       address,
       locationid,
-      role // Add role in update as well
     };
 
     if (hashedPassword) updateData.password = hashedPassword;

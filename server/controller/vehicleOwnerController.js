@@ -1,42 +1,27 @@
 const vehicleOwner = require('../models/VehicleOwner');
 
-// GET ALL VEHICLE OWNERS
 exports.getAllvehicleOwners = async (req, res) => {
     try {
-        const vehicleOwners = await vehicleOwner.find()
-            .populate("locationid", "locationname")
-            .populate("postcars", "catid vehicleownerid cartitle carvehicleno postdate price variant driverstatus registrationyear");
-
+        const vehicleOwners = await vehicleOwner.find().populate("locationid","locationname");
         res.status(200).json(vehicleOwners);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching vehicleOwners', error });
     }
-};
+}
 
-// CREATE VEHICLE OWNER
 exports.createvehicleOwner = async (req, res) => {
-    const { emailid, password, fullname, mobileno, dateofbirth, locationid, address, postcars } = req.body;
+    const { emailid, password, fullname, mobileno, dateofbirth, locationid, address} = req.body;
 
     try {
-        const newvehicleOwner = new vehicleOwner({
-            emailid,
-            password,
-            fullname,
-            mobileno,
-            dateofbirth,
-            locationid,
-            address,
-            postcars: postcars || [] // default empty array if not passed
-        });
-
+        const newvehicleOwner = new vehicleOwner({ emailid, password, fullname, mobileno, dateofbirth, locationid, address});
         await newvehicleOwner.save();
         res.status(201).json(newvehicleOwner);
     } catch (error) {
         res.status(500).json({ message: 'Error creating vehicleOwner', error });
     }
-};
+}
 
-// DELETE VEHICLE OWNER
+// DELETE vehicleOwner
 exports.deletevehicleOwner = async (req, res) => {
     const { id } = req.params;
 
@@ -53,10 +38,11 @@ exports.deletevehicleOwner = async (req, res) => {
     }
 };
 
-// UPDATE VEHICLE OWNER
+
+// UPDATE vehicleOwner
 exports.updatevehicleOwner = async (req, res) => {
     const { id } = req.params;
-    const { emailid, password, fullname, mobileno, dateofbirth, locationid, address, postcars } = req.body;
+    const { emailid, password, fullname, mobileno, dateofbirth, locationid, address } = req.body;
 
     try {
         const updatedvehicleOwner = await vehicleOwner.findByIdAndUpdate(
@@ -69,8 +55,7 @@ exports.updatevehicleOwner = async (req, res) => {
                     mobileno,
                     dateofbirth,
                     locationid,
-                    address,
-                    postcars: postcars || [] // ensure postcars is updated
+                    address
                 }
             },
             { new: true, runValidators: true }

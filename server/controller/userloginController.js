@@ -4,26 +4,26 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'my_super_secret_key_123';
 
-// 🔐 Login user with role
+// 🔐 Login user
 const loginUser = async (req, res) => {
   try {
-    const { emailid, password, role } = req.body; // Role added
+    const { emailid, password } = req.body;
 
-    // Check user exists with role
-    const user = await User.findOne({ emailid, role });
+    // Check user exists
+    const user = await User.findOne({ emailid });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email, password, or role' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     // Match password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email, password, or role' });
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     // Generate token
     const token = jwt.sign(
-      { userId: user._id, emailid: user.emailid, role: user.role },
+      { userId: user._id, emailid: user.emailid },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -37,7 +37,6 @@ const loginUser = async (req, res) => {
         fullname: user.fullname,
         emailid: user.emailid,
         mobileno: user.mobileno,
-        role: user.role
       }
     });
 

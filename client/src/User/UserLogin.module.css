@@ -1,12 +1,12 @@
-.container {
-  background-color: #f4f4f4;
-  padding: 2rem;
-  border-radius: 10px;
+ .container {
   max-width: 400px;
-  margin: 4rem auto; /* 👈 Center horizontally */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
 }
-
 
 .title {
   text-align: center;
@@ -26,19 +26,15 @@
   color: #555;
 }
 
-.input,
-.select {
+.input {
   padding: 8px 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   transition: border-color 0.3s ease;
-  background-color: white;
-  color: black;
 }
 
-.input:focus,
-.select:focus {
+.input:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);

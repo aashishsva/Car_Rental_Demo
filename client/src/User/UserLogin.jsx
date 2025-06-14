@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";  
 import styles from "./UserLogin.module.css";
 
 const UserLogin = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
 
   const [formData, setFormData] = useState({
     emailid: "",
     password: "",
-    role: "", 
   });
 
   const [message, setMessage] = useState("");
@@ -31,20 +30,13 @@ const UserLogin = () => {
       const res = await axios.post("http://localhost:5000/userlogin", formData);
       setMessage(res.data.message || "Login successful");
 
-      if (res.data.token) {
+      // Agar backend token bhejta hai to usse localStorage me store kar sakte ho:
+      if(res.data.token) {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role", formData.role); 
       }
 
-      // ✅ Navigate based on selected role
-      if (formData.role === "passenger") {
-        navigate("/userdashboard");
-      } else if (formData.role === "vehicleowner") {
-        navigate("/vehicleowner/dashboard");
-      } else {
-        navigate("/"); // fallback
-      }
-
+      // Login ke baad User Dashboard pe redirect kar do
+      navigate("/userdashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
@@ -54,6 +46,7 @@ const UserLogin = () => {
     <div className={styles.container}>
       <h2 className={styles.title}>User Login</h2>
       <form onSubmit={handleSubmit}>
+
         <div className={styles.formGroup}>
           <label className={styles.label}>Email</label>
           <input
@@ -76,21 +69,6 @@ const UserLogin = () => {
             required
             className={styles.input}
           />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Login As</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-            className={styles.select}
-          >
-            <option value="">Select Role</option>
-            <option value="passenger">Passenger</option>
-            <option value="vehicleowner">Vehicle Owner</option>
-          </select>
         </div>
 
         <button type="submit" className={styles.button}>Login</button>
