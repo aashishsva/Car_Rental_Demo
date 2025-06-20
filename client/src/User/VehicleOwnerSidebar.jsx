@@ -15,11 +15,12 @@ const VehicleOwnerSidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      <h3 className={styles.heading}>Owner Panel</h3>
+      <h3 className={styles.heading}>Vehicle Owner Panel</h3>
       <ul className={styles.navList}>
         <li onClick={() => navigate("/vehicleowner/dashboard")}>Dashboard</li>
         <li onClick={() => navigate("/vehicleowner/postcar")}>Post Car</li>
         <li onClick={() => navigate("/vehicleowner/order")}>View Orders</li>
+        <li onClick={() => navigate("/vehicleowner/reviews")}>Reviews</li>
         <li onClick={() => navigate("/vehicleowner/profile")}>Profile</li>
         <li onClick={handleLogout} className={styles.logout}>Logout</li>
       </ul>

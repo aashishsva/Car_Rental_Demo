@@ -102,52 +102,101 @@ const registerUser = async (req, res) => {
 };
 
 // 🔹 Update user by ID
+// const updateUser = async (req, res) => {
+//   try {
+//     const {
+//       fullname,
+//       emailid,
+//       mobileno,
+//       password,
+//       dateofbirth,
+//       address,
+//       locationid,
+//       role,
+//     } = req.body;
+
+//     const hashedPassword = password
+//       ? await bcrypt.hash(password, 10)
+//       : undefined;
+
+//     const updateData = {
+//       fullname,
+//       emailid,
+//       mobileno,
+//       dateofbirth,
+//       address,
+//       locationid,
+//       role,
+//     };
+
+//     if (hashedPassword) updateData.password = hashedPassword;
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       req.params.id,
+//       updateData,
+//       { new: true }
+//     );
+
+//     if (!updatedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     res.json({ message: "User updated successfully", user: updatedUser });
+//   } catch (err) {
+//     res
+//       .status(500)
+//       .json({ message: "Error updating user", error: err.message });
+//   }
+// };
 const updateUser = async (req, res) => {
   try {
-    const {
-      fullname,
-      emailid,
-      mobileno,
-      password,
-      dateofbirth,
-      address,
-      locationid,
-      role,
-    } = req.body;
+    // Extract user ID
+    const userId = req.params.id;
 
-    const hashedPassword = password
-      ? await bcrypt.hash(password, 10)
-      : undefined;
-
-    const updateData = {
-      fullname,
-      emailid,
-      mobileno,
-      dateofbirth,
-      address,
-      locationid,
-      role,
-    };
-
-    if (hashedPassword) updateData.password = hashedPassword;
-
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true }
-    );
-
-    if (!updatedUser) {
+    // Get current user from DB
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ message: "User updated successfully", user: updatedUser });
+    // Fields allowed to be updated
+    const { fullname, emailid, dateofbirth, address, locationid } = req.body;
+
+    // Optional: password update if provided
+    let updateData = {
+      fullname,
+      emailid,
+      dateofbirth,
+      address,
+      locationid,
+    };
+
+    // Optional password update
+    if (req.body.password) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      updateData.password = hashedPassword;
+    }
+
+    // ❌ Prevent updating restricted fields
+    // mobile number & role should not be updated
+    // (even if user sends it from frontend)
+    // We're not including `mobileno` or `role` in updateData
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
+
+    res.json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
   } catch (err) {
     res
       .status(500)
       .json({ message: "Error updating user", error: err.message });
   }
 };
+
 
 // 🔹 Delete user by ID
 const deleteUser = async (req, res) => {

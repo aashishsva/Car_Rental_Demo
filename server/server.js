@@ -65,6 +65,7 @@ app.put('/passenger/:id', passengerController.updatepassenger);
 app.delete('/passenger/:id', passengerController.deletepassenger);
 
 // PostCar routes with multer middleware for file upload
+app.get('/postcars/booking', postCarController.getAllCarsForBooking); // ✅ NEW Route
 app.get('/postcars', postCarController.getAllpostCars);
 
 app.post(
@@ -94,8 +95,12 @@ app.post('/ordercar', orderCarController.createorderCar);
 app.put('/ordercar/:id', orderCarController.updateorderCar);
 app.delete('/ordercar/:id', orderCarController.deleteorderCar);
 
+// ✅ New route to get orders of a specific passenger/user
+app.get('/user/:userid', orderCarController.getOrdersByUser);
+
 // Review routes
 app.get('/review', reviewController.getAllreviews);
+app.get('/review/owner/:ownerId', reviewController.getReviewsByOwner);
 app.post('/review', reviewController.createreview);
 app.put('/review/:id', reviewController.updatereview);
 app.delete('/review/:id', reviewController.deletereview);

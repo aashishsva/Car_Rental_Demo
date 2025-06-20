@@ -35,6 +35,7 @@ const UserLogin = () => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("role", formData.role);
         localStorage.setItem("fullname", res.data.user.fullname); // ✅ sahi tarika
+          localStorage.setItem("user", JSON.stringify(res.data.user));
         if (formData.role === "vehicleowner") {
           localStorage.setItem("vehicleownerid", res.data.user._id);
         }

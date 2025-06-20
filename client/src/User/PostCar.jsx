@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./PostCar.module.css";
-import VehicleOwnerSidebar from "./VehicleOwnerSidebar"; // ← Sidebar Import
+import VehicleOwnerSidebar from "./VehicleOwnerSidebar";
 
 const PostCar = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const PostCar = () => {
   const [editId, setEditId] = useState(null);
 
   const vehicleOwnerId = localStorage.getItem("vehicleownerid");
-
+  console.log("Vehicle Owner ID:", vehicleOwnerId);
   useEffect(() => {
     fetchCategories();
     fetchCars();
@@ -69,7 +69,7 @@ const PostCar = () => {
     const data = new FormData();
 
     data.append("catid", formData.catid);
-    data.append("vehicleownerid", vehicleOwnerId);
+    data.append("vehicleownerid", vehicleOwnerId); // ✅ Most important fix
     data.append("cartitle", formData.cartitle);
     data.append("shortdescription", formData.shortdescription);
     data.append("price", formData.price);

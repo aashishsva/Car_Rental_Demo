@@ -1,0 +1,75 @@
+/* Container to hold sidebar + content side-by-side */
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  width: 100vw;
+}
+
+/* Sidebar fix width */
+.sidebarContainer {
+  width: 250px;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+}
+
+/* Main content takes remaining space */
+.mainContent {
+  flex: 1;
+  padding: 30px;
+}
+
+/* Card styles (you already have this, just fixed width) */
+.card {
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  background: #f8f8f8;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  background: #f8f8f8;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.image {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.details h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.details p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.bookBtn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #0077ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.bookBtn:hover {
+  background-color: #005fd1;
+}

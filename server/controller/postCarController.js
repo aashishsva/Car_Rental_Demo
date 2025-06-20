@@ -1,31 +1,43 @@
-const postCar = require('../models/PostCar');
-const vehicleOwner = require('../models/VehicleOwner');
+const mongoose = require("mongoose");
+const postCar = require("../models/PostCar");
+const vehicleOwner = require("../models/VehicleOwner");
 
-// Get all postCars of logged-in vehicle owner
+// ✅ GET all cars for User Booking Page with Owner Name
+exports.getAllCarsForBooking = async (req, res) => {
+  try {
+    const postCars = await postCar
+      .find()
+      .populate("catid", "catname")
+      .populate("vehicleownerid", "fullname"); // ✅ Populate owner name
+
+    res.status(200).json(postCars);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching all cars", error });
+  }
+};
+
+// ✅ GET all cars posted by logged-in Vehicle Owner
 exports.getAllpostCars = async (req, res) => {
   try {
     const { vehicleownerid } = req.query;
 
-    // If no vehicleownerid is provided, return error
     if (!vehicleownerid) {
-      return res.status(400).json({ message: 'vehicleownerid is required' });
+      return res.status(400).json({ message: "vehicleownerid is required" });
     }
 
-    const postCars = await postCar.find({ vehicleownerid })  // <-- ✅ Filter here
+    const postCars = await postCar
+      .find({ vehicleownerid })
       .populate("catid", "catname")
       .populate("vehicleownerid", "fullname");
 
     res.status(200).json(postCars);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching postCars', error });
+    res.status(500).json({ message: "Error fetching postCars", error });
   }
 };
 
-
-
+// ✅ CREATE new car post by vehicle owner
 exports.createpostCar = async (req, res) => {
-  console.log("REQ BODY:", req.body);
-  console.log("Vehicle Owner ID:", req.body.vehicleownerid);
   try {
     const {
       catid,
@@ -38,8 +50,10 @@ exports.createpostCar = async (req, res) => {
       driverstatus,
       registrationyear,
       carvehicleno,
-      rcnumber
+      rcnumber,
     } = req.body;
+
+    const objectVehicleOwnerId = new mongoose.Types.ObjectId(vehicleownerid); // 🔁 ensure ObjectId
 
     const carimage1 = req.files?.carimage1?.[0]?.filename || null;
     const carimage2 = req.files?.carimage2?.[0]?.filename || null;
@@ -47,7 +61,7 @@ exports.createpostCar = async (req, res) => {
 
     const newpostCar = new postCar({
       catid,
-      vehicleownerid,
+      vehicleownerid: objectVehicleOwnerId,
       cartitle,
       shortdescription,
       postdate,
@@ -59,13 +73,13 @@ exports.createpostCar = async (req, res) => {
       rcnumber,
       carimage1,
       carimage2,
-      rcimage
+      rcimage,
     });
 
     await newpostCar.save();
 
     await vehicleOwner.findByIdAndUpdate(
-      vehicleownerid,
+      objectVehicleOwnerId,
       { $push: { postcars: newpostCar._id } },
       { new: true }
     );
@@ -73,11 +87,11 @@ exports.createpostCar = async (req, res) => {
     res.status(201).json(newpostCar);
   } catch (error) {
     console.log("Error in createpostCar:", error);
-    res.status(500).json({ message: 'Error creating postCar', error });
+    res.status(500).json({ message: "Error creating postCar", error });
   }
 };
 
-// Update postCar by ID with optional new images
+// ✅ UPDATE car post
 exports.updatepostCar = async (req, res) => {
   const { id } = req.params;
   try {
@@ -92,7 +106,7 @@ exports.updatepostCar = async (req, res) => {
       driverstatus,
       registrationyear,
       carvehicleno,
-      rcnumber
+      rcnumber,
     } = req.body;
 
     const updateFields = {
@@ -106,7 +120,7 @@ exports.updatepostCar = async (req, res) => {
       ...(driverstatus && { driverstatus }),
       ...(registrationyear && { registrationyear }),
       ...(carvehicleno && { carvehicleno }),
-      ...(rcnumber && { rcnumber })
+      ...(rcnumber && { rcnumber }),
     };
 
     if (req.files?.carimage1?.[0]) updateFields.carimage1 = req.files.carimage1[0].filename;
@@ -120,24 +134,23 @@ exports.updatepostCar = async (req, res) => {
     );
 
     if (!updatedpostCar) {
-      return res.status(404).json({ message: 'PostCar not found' });
+      return res.status(404).json({ message: "PostCar not found" });
     }
 
     res.status(200).json(updatedpostCar);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating postCar', error });
+    res.status(500).json({ message: "Error updating postCar", error });
   }
 };
 
-// Delete postCar by ID and remove from owner's postcars[]
+// ✅ DELETE car post
 exports.deletepostCar = async (req, res) => {
   const { id } = req.params;
-
   try {
     const deletedpostCar = await postCar.findByIdAndDelete(id);
 
     if (!deletedpostCar) {
-      return res.status(404).json({ message: 'PostCar not found' });
+      return res.status(404).json({ message: "PostCar not found" });
     }
 
     await vehicleOwner.findByIdAndUpdate(
@@ -145,8 +158,8 @@ exports.deletepostCar = async (req, res) => {
       { $pull: { postcars: deletedpostCar._id } }
     );
 
-    res.status(200).json({ message: 'PostCar deleted successfully' });
+    res.status(200).json({ message: "PostCar deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting postCar', error });
+    res.status(500).json({ message: "Error deleting postCar", error });
   }
 };

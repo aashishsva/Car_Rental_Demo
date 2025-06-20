@@ -1,0 +1,68 @@
+/* VehicleOwnerReviews.module.css */
+
+.reviewContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', sans-serif;
+  width: 100vw;
+}
+
+.sidebarWrapper {
+  width: 250px; /* Fixed sidebar width */
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.reviewContent {
+  flex: 1;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.reviewCard {
+  background-color: #f2f2f2;
+  border-left: 6px solid #007bff;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s ease;
+}
+
+.reviewCard:hover {
+  transform: scale(1.01);
+  background-color: #e9f5ff;
+}
+
+.reviewCard p {
+  margin: 6px 0;
+}
+
+.reviewActions {
+  margin-top: 12px;
+}
+
+.reviewActions button {
+  margin-right: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.reviewActions button:hover {
+  background-color: #0056b3;
+}
