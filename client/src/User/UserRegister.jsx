@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./UserRegister.module.css";  // Import CSS module
+import styles from "./UserRegister.module.css"; // Import CSS module
 
 const UserRegister = () => {
   const [locations, setLocations] = useState([]);
@@ -13,20 +13,21 @@ const UserRegister = () => {
     dateofbirth: "",
     address: "",
     locationid: "",
-    role: ""  // 👈 Added role here
+    role: "", // 👈 Added role here
   });
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:5000/locationMaster")
-      .then(res => setLocations(res.data))
-      .catch(err => console.error("Error fetching locations", err));
+    axios
+      .get("http://localhost:5000/locationMaster")
+      .then((res) => setLocations(res.data))
+      .catch((err) => console.error("Error fetching locations", err));
   }, []);
 
   const handleChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -38,7 +39,10 @@ const UserRegister = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/userregister", formData);
+      const res = await axios.post(
+        "http://localhost:5000/userregister",
+        formData
+      );
       setMessage(res.data.message || "Registration successful");
       setFormData({
         fullname: "",
@@ -48,8 +52,12 @@ const UserRegister = () => {
         dateofbirth: "",
         address: "",
         locationid: "",
-        role: ""
+        role: "",
       });
+      //Redirect to login page after 1.5 seconds
+      setTimeout(() => {
+        navigate("/userlogin");
+      }, 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     }
@@ -59,7 +67,6 @@ const UserRegister = () => {
     <div className={styles.container}>
       <h2 className={styles.title}>User Registration</h2>
       <form onSubmit={handleSubmit}>
-
         {/* Full Name */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Full Name</label>
@@ -150,8 +157,10 @@ const UserRegister = () => {
             className={styles.select}
           >
             <option value="">Select Location</option>
-            {locations.map(loc => (
-              <option key={loc._id} value={loc._id}>{loc.locationname}</option>
+            {locations.map((loc) => (
+              <option key={loc._id} value={loc._id}>
+                {loc.locationname}
+              </option>
             ))}
           </select>
         </div>
@@ -172,10 +181,14 @@ const UserRegister = () => {
           </select>
         </div>
 
-        <button type="submit" className={styles.button}>Register</button>
+        <button type="submit" className={styles.button}>
+          Register
+        </button>
       </form>
 
-      {message && <p className={`${styles.message} ${styles.success}`}>{message}</p>}
+      {message && (
+        <p className={`${styles.message} ${styles.success}`}>{message}</p>
+      )}
       {error && <p className={`${styles.message} ${styles.error}`}>{error}</p>}
     </div>
   );

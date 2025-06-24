@@ -19,6 +19,8 @@ const userAuth = require('./middleware/userAuth')
 
 const upload = require('./middleware/upload'); // multer middleware
 
+const bookingController = require('./controller/bookingController');
+
 const MONGO_URI = 'mongodb://localhost:27017/rentalDB'; 
 const app = express();
 
@@ -65,6 +67,8 @@ app.put('/passenger/:id', passengerController.updatepassenger);
 app.delete('/passenger/:id', passengerController.deletepassenger);
 
 // PostCar routes with multer middleware for file upload
+app.get("/postcars/all", postCarController.getAllCarsUniversal);
+
 app.get('/postcars/booking', postCarController.getAllCarsForBooking); // ✅ NEW Route
 app.get('/postcars', postCarController.getAllpostCars);
 
@@ -124,6 +128,14 @@ app.delete('/userregister/:id', userRegistrationController.deleteUser);
 
 //User Login routes
 app.post('/userlogin', userLoginController)
+
+
+// Booking routes
+app.post('/booking', bookingController.createBooking);
+// app.get('/booking/:id', bookingController.getBookingById);
+app.get('/booking/user/:userId', bookingController.getBookingsByUser);
+app.put('/booking/cancel/:id', bookingController.cancelBooking);
+
 
 const PORT = 5000;
 app.listen(PORT, () => {

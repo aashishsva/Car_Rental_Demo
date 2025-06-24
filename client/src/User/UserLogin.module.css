@@ -74,3 +74,18 @@
   color: red;
   white-space: pre-wrap;
 }
+.registerLink {
+  margin-top: 1rem;
+  color: #ddd;
+  font-size: 0.95rem;
+}
+
+.linkText {
+  color: #4ca1af;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.linkText:hover {
+  color: #63c3cd;
+}

@@ -2,6 +2,22 @@ const mongoose = require("mongoose");
 const postCar = require("../models/PostCar");
 const vehicleOwner = require("../models/VehicleOwner");
 
+
+//Universal GET all cars with Owner Name
+exports.getAllCarsUniversal = async (req, res) => {
+  try {
+    const postCars = await postCar
+      .find() // 🔄 No filter, fetch all cars
+      .populate("catid", "catname")
+      .populate("vehicleownerid", "fullname");
+
+    res.status(200).json(postCars);
+  } catch (error) {
+    console.error("Error in getAllCarsUniversal:", error);
+    res.status(500).json({ message: "Error fetching cars", error });
+  }
+};
+
 // ✅ GET all cars for User Booking Page with Owner Name
 exports.getAllCarsForBooking = async (req, res) => {
   try {
